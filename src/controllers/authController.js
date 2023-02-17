@@ -53,7 +53,7 @@ const authController = {
                 user: newUser,
             });
         } catch (err) {
-            next(err);
+            next(new Error("Username or email already used"));
         }
     },
 
@@ -62,7 +62,7 @@ const authController = {
             const { userName, password } = req.body;
 
             if (!userName || !password) {
-                throw new Error("Invalid userName or password");
+                throw new Error("Incorrect account or password");
             }
 
             const userLogin = await User.findOne({
@@ -70,13 +70,13 @@ const authController = {
             });
 
             if (!userLogin) {
-                throw new Error("Invalid user name or password");
+                throw new Error("Incorrect account or password");
             }
 
             const matchPassword = await bcrypt.compare(password, userLogin.password);
 
             if (!matchPassword) {
-                throw new Error("Invalid password");
+                throw new Error("Incorrect account or password");
             }
 
             const { accessToken, refreshToken } = generateToken(userLogin._id);

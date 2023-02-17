@@ -42,7 +42,7 @@ app.use((err, req, res, next) => {
     console.log("err", err?.message);
     res.status(500).json({
         status: err.status || 500,
-        message: err.message,
+        message: err?.message || 'An unexpected error occurred',
     });
 });
 
